@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>County Tracker, 2013</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/LegendColors.css">
+        <link rel="stylesheet" href="css/notLT.css">
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="http://d3js.org/queue.v1.min.js"></script>
+		<script src="http://d3js.org/topojson.v1.min.js"></script>
+    </head>
+    <body>
+		<div class="container">
+			
+			<div id="help">help?</div>
+	    	<h1>NACo COUNTY TRACKER 2013</h1>
+	    	
+	    	
+	        <!--[if lt IE 7]>
+	            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+	        <![endif]-->
+	
+	        <!-- Add your site or application content here -->
+		        <div id="instructions">
+		        	<div id="close">Close</div>
+		        	<div id="instructionText">
+			        	<img src="apple-touch-icon.png" class="instructionImg"><!--image of pointer over county-->
+			        	<p>Click on any county to begin OR select a state from the dropdown menu and then choose your county.</p>
+			        	<br clear="left"/>
+			        	<img src="apple-touch-icon.png" class="instructionImg"><!--image of dropdown menu-->
+			        	<p>Click on another county to move across the map.</p>
+			        	<br clear="left"/>
+			        	<img src="apple-touch-icon.png" class="instructionImg">
+			        	<p>To return to the US map, click again on the selected county OR click <strong>"Return to US Map"</strong> in the top-right corner.</p>
+			        	<br clear="left"/>
+			        	<img src="apple-touch-icon.png" class="instructionImg">
+			        	<p>Use the legend to highlight counties of different population sizes.</p>
+			        	<br clear="left"/>
+			        	<img src="apple-touch-icon.png" class="instructionImg">
+			        	<p>The indicators are available for four time periods: 2012-2013, recession, recovery and long-term.</p>
+			        	<br clear="left"/>
+			        	<img src="apple-touch-icon.png" class="instructionImg">
+			        	<p>Have questions? Hover for definitions, or <a href="mailto:research@naco.org">email us</a>.</p>
+			        </div>
+		        </div>
+		        <div id="keyTerms">
+		        	<div id="close2">Close</div>
+		        	<h2 style="margin-bottom:0;">KEY TERMS</h2>
+		        	<div id="keyTermsText">
+		        		<ul style="list-style-type:none;">
+		        			<li><strong>County:</strong> The primary legal division of most states for which the U.S. Census Bureau presents data. It can have a county government or be an unorganized area bearing county designations. In Louisiana, a county is known as parish. In Alaska, the county equivalent entities are the organized boroughs, city and boroughs, municipalities and census areas. The state of Alaska and the U.S. Census Bureau created the Alaska census areas for statistical purposes. Four states (Maryland, Missouri, Nevada and Virginia), have independent cities that the U.S. Census Bureau treats as equivalent entities for purposes of data presentation. All of the county economies in Connecticut and Rhode Island and nine county economies in Massachusetts do not have any longer county governments. The U.S. Census Bureau includes them among county economies to provide comparable geographic units at the county level for these states. There are 3,144 county economies and county equivalents in the United States.</li>
+		        			<li><strong>County government:</strong> An organized entity with governmental character, sufficient discretion in the management of its own affairs to be an independent governmental unit and covering the area of county or county equivalent. Depending on the state, it can be known also as parish government or borough government. This study considers as county governments all the consolidated county-city entities, areas designated as metropolitan governments, cities administering functions performed by county governments and areas with certain types of county offices, but included as part of another government. There are 3,069 county governments in the United States.</li>
+		        			<li><strong>County Economy:</strong> The economy of a county with county government.</li>
+		        			<li><strong>Economic Output (gross domestic product - GDP):</strong>Total value of goods and services produced by a county economy, also known as GDP. <em>Data source: Moody’s Analytics</em></li>
+		        			<li><strong>Total Jobs:</strong> Total wage and salary jobs, whether full or part-time, temporary or permanent in a county economy. It counts the number of jobs, not employed people, for all employers in a county economy, not only for the county government. <em>Data source: Moody’s Analytics</em></li>
+		        			<li><strong>Median Home Sales Prices:</strong> Median sales prices of existing single-family homes. <em>Data source: Moody’s Analytics</em></li>
+		        			<li><strong>Unemployment Rate:</strong> The proportion of the civilian labor force that is unemployed. Persons are classified as unemployed if they do not have a job, have actively looked for work in the prior 4 weeks and are currently available for work. <em>Data source: Moody’s Analytics</em></li>
+		        			<li><strong>Average Wage:</strong> Wages and salary disbursements per job. This indicator is calculated based on total wage and salary disbursements and total wage and salary jobs for each county economy and for each county major industry. <em>Data source: NACo analysis of Moody’s Analytics data</em></li>
+		        			<li><strong>Population:</strong> The number of county residents in 2012. <em>Data source: Census Population estimates, 2012</em></li>
+		        			<li><strong>Large County Economies:</strong> The economies of counties with more than 500,000 residents in 2012.</li>
+		        			<li><strong>Medium-sized County Economies:</strong> The economies of counties with populations between 50,000 and 500,000 people in 2012.</li>
+		        			<li><strong>Small County Economies</strong> The economies of counties with less than 50,000 residents in 2012.</li>
+		        			<li><strong>Annualized Growth Rate:</strong> Year-over-year growth rate of an indicator (economic output (GDP), jobs or home prices) over a specified period of time, showing how much an indicator would have grown annually if it increased at a steady rate over a certain period. The growth rates of county economic output (GDP) are inflation-adjusted.</li>
+		        			<li><strong>Average Annual Unemployment Rate:</strong> The average of the county economy annual unemployment rates over a specified number of years.</li>
+		        			<li><strong>Peak:</strong> The highest annual value of a county economy indicator (the lowest for the unemployment rate) between 2002 and 2009.  2002 marks the first year after the end of the previous U.S. recession. 2009 marks the end of the latest U.S. recession. The National Bureau of Economic Research (NBER) determines the end of U.S. economic recessions.</li>
+		        			<li><strong>Trough:</strong> The lowest annual value of a county economy indicator (the highest for the unemployment rate) between the peak and 2013.</li>
+		        			<li><strong>Recovery Rate:</strong> Share of the losses in a specific indicator suffered during the recession that the county recuperated during the recovery. It shows the county’s progress on the trajectory of recovery according to a specific indicator</li>
+		        		</ul>
+		        		<p>The analyzed time period covers 1990 to 2013 to capture county economic performance evolution before and since the latest U.S. recession and it is individualized to each county indicator:</p>
+		        		<ul style="list-style-type:none">
+		        			<li><strong>Long-term:</strong> 1990 to the pre-recession peak year for an indicator for a county. This provides a benchmark to compare the current growth rates in a county.</li>
+		        			<li><strong>Recession:</strong> Pre-recession peak to the year with the trough value for an indicator for a county during the latest U.S. economic downturn. The difference between the pre-recession peak and the trough value has to be larger than one percent of the peak value to be counted. It is possible that no recession occurred for an indicator in a given county.</li>
+		        			<li><strong>Recovery:</strong> Trough year to 2013 for an indicator for a county. If the county had no recession, the recovery period is from peak to 2013. It is possible that a county has not yet entered the recovery period based on an indicator.</li>
+		        			<li><strong>2012-2013</strong> Growth rate (change for the unemployment rate) over the most recent year, based on annual estimates.</li>
+		        		</ul>
+		        	</div>
+		        </div>
+		        <script>
+		        	var instructionBox = d3.select("#instructions").style("display", "block");
+		        	
+		        	var closeButton = d3.select('#close').on("click", function(){ instructionBox.style("display", "none"); });
+		        	
+		        	var helpButton = d3.select("#help").on("click", function(){ instructionBox.style("display", "block"); });
+		        
+		        </script>
+	        <div id="map"></div>
+        </div>
+        
+		
+        
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+        <script src="js/plugins.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+  
+        
+        <!-- Google Analytics: UA-44457538-1 = site ID. -->
+        <script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		
+		  ga('create', 'UA-44457538-1', 'uscounties.org');
+		  ga('send', 'pageview');
+		
+		</script>
+        
+        
+        <div id="underMap">
+        <div>
+        	<p id="byline">Interactive by Nicholas Lyell</p>
+        	<p id="dataSource"><em>Data Source: Moody's Analytics</em></p>
+        	<p id="dataNotes" ><strong>Notes:</strong>  This study determines peak and trough values and years separately for each county and each indicator.  Peak values represent the highest annual value of a county indicator between 2002 and 2009.  2002 marks the first year after the end of the previous recession; 2009 marks the end of the latest U.S. recession as determined by the National Bureau of Economic Research.  Trough values represent the lowest annual value of a county indicator between the peak and 2013.  Multi-year growth rates are annualized, showing how much an indicator would have grown annually if it expanded at a steady rate over a certain period.  All data are estimates and 2013 data are forecasts.  Hover above for definitions, or <a id="keyTermsButton">click here for full data notes.</a></p>
+        </div>
+        <script>
+        	var keyTermsBox = d3.select("#keyTerms").style("display", "none");
+        	
+        	var closeButton = d3.select('#close2').on("click", function(){ keyTermsBox.style("display", "none"); });
+        	
+        	var keyTermsButton = d3.select("#keyTermsButton").on("click", function(){ keyTermsBox.style("display", "block"); });
+        </script>
+         <div id="intro"></div>
+    	</div>
+    	<script src="js/main.js"></script>
+    	<div id="footer"></div>
+    </body>
+</html>

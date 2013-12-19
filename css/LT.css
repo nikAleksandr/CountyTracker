@@ -1,0 +1,27 @@
+
+.dataBox {
+	width: 25%;
+	float:left;
+	height: auto;	
+}
+
+.dataTitle {
+	text-align: left;
+	line-height: inherit;
+	width: 87.5%;
+	float: left;
+	height: 30%;
+	padding-left:.5em;
+	font-size: 1.2em;
+	border-style: none none solid none;
+	border-width: .1em;
+	border-color:#000000;
+}
+
+.dataNum{
+	display: block;
+	width: 87.5%;
+	margin: .5em auto .5em auto;
+	font-size:3.5em;
+	float:left;
+}

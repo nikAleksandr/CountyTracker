@@ -1,0 +1,52 @@
+/*Original Color Stylings */
+.All .Sm {
+	fill: rgb(201,228,242);
+}
+.All .Md {
+	fill: rgb(96,175,215);
+}
+.All .Lg {
+	fill: rgb(10,132,193);
+}
+/*
+#lgBox{
+	background: #0A84C1;
+}
+#mdBox{
+	background: #60AFD7;
+}
+#smBox{
+	background: #C9E4F2;
+}
+*/
+/* Large Counties in Orange */
+.legendLg .Lg {
+	fill: #FFA601;
+}
+.legendLg .Md {
+	fill: #aaa;
+}
+.legendLg .Sm {
+	fill: #aaa;
+} 
+
+/* Medium-sized counties in Orange */
+.legendMd .Lg {
+	fill: #aaa;
+}
+.legendMd .Md {
+	fill: #FFA601;
+}
+.legendMd .Sm {
+	fill: #aaa
+}
+/*Small counties in Orange */
+.legendSm .Lg {
+	fill: #aaa
+}
+.legendSm .Md {
+	fill: #aaa
+}
+.legendSm .Sm {
+	fill: #FFA601;
+}

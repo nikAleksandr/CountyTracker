@@ -1,0 +1,19 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    <name> -- <role> -- <twitter>
+    Nicholas Lyell -- Web Developer/Data Analyst/Project Lead -- nlyell@naco.org
+    Emily Star -- Graphic Designer -- estar@naco.org
+    Emilia Istrate -- Deparment Head -- eistrate@naco.org
+
+
+# THANKS
+
+    Member Counties who make NACo's work possible
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3
+    Normalize.css, D3, jQuery, Modernizr
