@@ -1,0 +1,22 @@
+.dataNum{
+	display: block;
+	width: 87.5%;
+	margin: .5em auto .5em auto;
+	font-size:2.5em;
+	float:left;
+}
+
+
+#singleNum, #compNum{
+	display: inline-block;
+	width: 50%;
+	margin: 0 auto;
+}
+
+#singleTitle, #compTitle{
+	display: inline-block;
+	width: 50%;
+}
+#compTitle{
+	text-align: right;
+}

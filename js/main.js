@@ -13,6 +13,27 @@ var percentage = function(n){
 	}
 };
 
+var comparePressed = false;
+
+function comparison(Pressed){
+	if (!Pressed){
+		comparePressed = true;
+		d3.select("#compareButton").style("background-color", "red");
+		//change css file to make room for comparison data
+		changeCSS('css/compareCounty.css', 5);
+		//reset map to us
+		xclickZoom(centered);
+	}
+	else{
+		comparePressed = false;
+		d3.select("#compareButton").style("background-color", "white");
+		//reset the css file to the original
+		changeCSS('css/singleCounty.css', 5);
+		//reset the map to the us (or to the county first selected)
+		updateData(selectedCounty);
+	}
+}
+
 //
 var width = parseInt(d3.select('.container').style('max-width')),
 	mapRatio = .7,
@@ -364,9 +385,11 @@ function ready(error, us, CountyData) {
 			
 		var USmapButton = d3.select("#infoBar").append("div").attr("id", "USmapButton").on("click", function(){ xclickZoom(centered); clearInfoBar(); });
 			USmapButton.text("Return to US Map");
-			//END form element section       
-			
-	
+			//END form element section      
+		
+		var compareButton = d3.select("#infoBar").append("div").attr("id", "compareButton").on("click", function(){ comparison(comparePressed); });
+			compareButton.text("Compare");
+		
 	  g.append("g")
 	      .attr("id", "counties")
 	    .selectAll("path")
@@ -430,16 +453,27 @@ function changeCSS(cssFile, cssLinkIndex){
 	 function updateData(d) {
 	 		
 	 	if(d){
+	 		if(!comparePressed){
+	 			selectedCounty = d;
+	 		}
+	 		else{
+	 			comparisonCounty = d;
+	 		}
 	 		
-	 		selectedCounty = d;
 	 			
 			d3.selectAll(".selectATime").remove();
 			
 	 		d3.selectAll("#infoUpdate").remove();
 	 		var infoUpdate = infoBar.append("infoUpdate").attr("id", "infoUpdate");
 	 	
-		 	infoUpdate.append("titleBox").attr("id", "countyTitle").style("background-color", "white").transition().style("background-color", "#0A84C1")
-		 		.text(function(){ return nameById[d.id].toUpperCase(); });
+		 	
+		 	var countyName = infoUpdate.append("titlebox").attr("id", "countyTitle").style("background-color", "white").transition().style("background-color", "#0A84C1");
+		 		d3.select("#countyTitle").append("div").attr("id", "singleTitle").text(function(){ return nameById[selectedCounty.id].toUpperCase(); });
+		 		
+		 		if(comparePressed){
+		 			d3.select("#countyTitle").append("div").attr("id", "compTitle").text(function(){ return nameById[comparisonCounty.id].toUpperCase(); });
+		 		}
+		 	
 		 }
 		
 		
@@ -450,17 +484,26 @@ function changeCSS(cssFile, cssLinkIndex){
 			changeCSS('css/notLT.css', 4);
 				
 			infoUpdate.append("gdpbox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "GDPTitle").text("Real Output (GDP) Annualized" + " Growth Rate, " + timePeriodText);
-				d3.selectAll("gdpbox").append("gdpnum").attr("class", "dataNum").text(function(){return percentage(GDP13ById[d.id]) + "%"; });
+				d3.selectAll("gdpbox").append("gdpnum").attr("class", "dataNum").append("div").attr("id", "singleNum").text(function(){return percentage(GDP13ById[selectedCounty.id]) + "%"; });
 			infoUpdate.append("avgunembox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "avgUnemTitle").html("Unemployment Rate, " + "<br/>" + "2013");
-				d3.selectAll("avgunembox").append("avgunemnum").attr("class", "dataNum").text(function(){return percentage(avgUnem13ById[d.id]) + "%"; });
+				d3.selectAll("avgunembox").append("avgunemnum").attr("class", "dataNum").text(function(){return percentage(avgUnem13ById[selectedCounty.id]) + "%"; });
 			infoUpdate.append("unembox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "unemTitle").html("Unemployment" + "<br/>" + " Rate Change*, " + timePeriodText);
-				d3.selectAll("unembox").append("unemnum").attr("class", "dataNum").text(function(){return percentage(unem13ById[d.id]) + "pps"; });
+				d3.selectAll("unembox").append("unemnum").attr("class", "dataNum").text(function(){return percentage(unem13ById[selectedCounty.id]) + "pps"; });
 			infoUpdate.append("hhbox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "HHTitle").text("Median Home Prices Annualized" + " Growth Rate, " + timePeriodText);
-				d3.selectAll("hhbox").append("hhnum").attr("class", "dataNum").text(function(){return percentage(HH13ById[d.id]) + "%"; });
+				d3.selectAll("hhbox").append("hhnum").attr("class", "dataNum").text(function(){return percentage(HH13ById[selectedCounty.id]) + "%"; });
 			/*infoUpdate.append("avgwagebox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").text("Average Wage Per Job Annualized Growth Rate, " + timePeriodText);
 				d3.selectAll("avgwagebox").append("avgwagenum").attr("class", "dataNum").text(function(){return percentage(avgWage13ById[d.id]) });*/
 			infoUpdate.append("jobsbox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "jobsTitle").html("Jobs Annualized" + "<br/>" + " Growth Rate, " + timePeriodText);
-				d3.selectAll("jobsbox").append("jobsnum").attr("class", "dataNum").text(function(){return percentage(jobs13ById[d.id]) + "%"; });
+				d3.selectAll("jobsbox").append("jobsnum").attr("class", "dataNum").text(function(){return percentage(jobs13ById[selectedCounty.id]) + "%"; });
+				
+			//comparison data
+			if(comparePressed){
+				d3.selectAll("gdpnum").append("div").attr("id", "compNum").text(function(){return percentage(GDP13ById[comparisonCounty.id]) + "%"; });
+				d3.selectAll("avgunemnum").append("div").attr("id", "compNum").text(function(){return percentage(avgUnem13ById[comparisonCounty.id]) + "%"; });
+				d3.selectAll("unemnum").append("div").attr("id", "compNum").text(function(){return percentage(unem13ById[comparisonCounty.id]) + "pps"; });
+				d3.selectAll("hhnum").append("div").attr("id", "compNum").text(function(){return percentage(HH13ById[comparisonCounty.id]) + "%"; });
+				d3.selectAll("jobsnum").append("div").attr("id", "compNum").text(function(){return percentage(jobs13ById[comparisonCounty.id]) + "%"; });
+			}
 		}
 		if(timePeriod=="DR"){
 				d3.selectAll(".timePeriodSelect").classed(false).attr("class", "timePeriods");
@@ -469,17 +512,17 @@ function changeCSS(cssFile, cssLinkIndex){
 			changeCSS('css/notLT.css', 4);
 				
 			infoUpdate.append("gdpbox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "GDPTitle").text("Real Output (GDP) Annualized" + " Growth Rate, " + timePeriodText);
-				d3.selectAll("gdpbox").append("gdpnum").attr("class", "dataNum").text(function(){return percentage(GDPDRById[d.id]) + "%"; });
+				d3.selectAll("gdpbox").append("gdpnum").attr("class", "dataNum").text(function(){return percentage(GDPDRById[selectedCounty.id]) + "%"; });
 			infoUpdate.append("avgunembox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "avgUnemTitle").html("Average Annual Unemployment Rate, " + timePeriodText);
-				d3.selectAll("avgunembox").append("avgunemnum").attr("class", "dataNum").text(function(){return percentage(avgUnemDRById[d.id]) + "%"; });
+				d3.selectAll("avgunembox").append("avgunemnum").attr("class", "dataNum").text(function(){return percentage(avgUnemDRById[selectedCounty.id]) + "%"; });
 			infoUpdate.append("unembox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "unemTitle").text("Average Annual Unemployment" + " Change*, " + timePeriodText);
-				d3.selectAll("unembox").append("unemnum").attr("class", "dataNum").text(function(){return percentage(unemDRById[d.id])+ "pps"; });
+				d3.selectAll("unembox").append("unemnum").attr("class", "dataNum").text(function(){return percentage(unemDRById[selectedCounty.id])+ "pps"; });
 			infoUpdate.append("hhbox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "HHTitle").text("Median Home Prices Annualized" + " Growth Rate, " + timePeriodText);
-				d3.selectAll("hhbox").append("hhnum").attr("class", "dataNum").text(function(){return percentage(HHDRById[d.id]) + "%"; });
+				d3.selectAll("hhbox").append("hhnum").attr("class", "dataNum").text(function(){return percentage(HHDRById[selectedCounty.id]) + "%"; });
 			/*infoUpdate.append("avgwagebox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").text("Average Wage Per Job Growth Rate, " + timePeriodText);
 				d3.selectAll("avgwagebox").append("avgwagenum").attr("class", "dataNum").text(function(){return percentage(avgWageDRById[d.id]) });*/
 			infoUpdate.append("jobsbox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "jobsTitle").html("Jobs Annualized" + "<br/>" + " Growth Rate, " + timePeriodText);
-				d3.selectAll("jobsbox").append("jobsnum").attr("class", "dataNum").text(function(){return percentage(jobsDRById[d.id]) + "%"; });
+				d3.selectAll("jobsbox").append("jobsnum").attr("class", "dataNum").text(function(){return percentage(jobsDRById[selectedCounty.id]) + "%"; });
 		}
 		if(timePeriod=="PR"){
 				d3.selectAll(".timePeriodSelect").classed(false).attr("class", "timePeriods");
@@ -488,17 +531,17 @@ function changeCSS(cssFile, cssLinkIndex){
 			changeCSS('css/notLT.css', 4);
 			
 			infoUpdate.append("gdpbox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "GDPTitle").text("Real Output (GDP) Annualized" + " Growth Rate, " + timePeriodText);
-				d3.selectAll("gdpbox").append("gdpnum").attr("class", "dataNum").text(function(){return percentage(GDPPRById[d.id]) + "%"; });
+				d3.selectAll("gdpbox").append("gdpnum").attr("class", "dataNum").text(function(){return percentage(GDPPRById[selectedCounty.id]) + "%"; });
 			infoUpdate.append("avgunembox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "avgUnemTitle").html("Average Annual Unemployment Rate, " + timePeriodText);
-				d3.selectAll("avgunembox").append("avgunemnum").attr("class", "dataNum").text(function(){return percentage(avgUnemPRById[d.id]) + "%"; });
+				d3.selectAll("avgunembox").append("avgunemnum").attr("class", "dataNum").text(function(){return percentage(avgUnemPRById[selectedCounty.id]) + "%"; });
 			infoUpdate.append("unembox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "unemTitle").text("Average Annual Unemployment" + " Change*, " + timePeriodText);
-				d3.selectAll("unembox").append("unemnum").attr("class", "dataNum").text(function(){return percentage(unemPRById[d.id]) + "pps"; });
+				d3.selectAll("unembox").append("unemnum").attr("class", "dataNum").text(function(){return percentage(unemPRById[selectedCounty.id]) + "pps"; });
 			infoUpdate.append("hhbox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "HHTitle").text("Median Home Prices Annualized" + " Growth Rate, " + timePeriodText);
-				d3.selectAll("hhbox").append("hhnum").attr("class", "dataNum").text(function(){return percentage(HHPRById[d.id]) + "%"; });
+				d3.selectAll("hhbox").append("hhnum").attr("class", "dataNum").text(function(){return percentage(HHPRById[selectedCounty.id]) + "%"; });
 			/*infoUpdate.append("avgwagebox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").text("Average Wage Per Job Growth Rate, " + timePeriodText);
 				d3.selectAll("avgwagebox").append("avgwagenum").attr("class", "dataNum").text(function(){return percentage(avgWagePRById[d.id]) });*/
 			infoUpdate.append("jobsbox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "jobsTitle").html("Jobs Annualized" + "<br/>" + " Growth Rate, " + timePeriodText);
-				d3.selectAll("jobsbox").append("jobsnum").attr("class", "dataNum").text(function(){return percentage(jobsPRById[d.id]) + "%"; });
+				d3.selectAll("jobsbox").append("jobsnum").attr("class", "dataNum").text(function(){return percentage(jobsPRById[selectedCounty.id]) + "%"; });
 		}
 		if(timePeriod=="LT"){
 				d3.selectAll(".timePeriodSelect").classed(false).attr("class", "timePeriods");
@@ -507,15 +550,15 @@ function changeCSS(cssFile, cssLinkIndex){
 			changeCSS('css/LT.css', 4);
 			
 			infoUpdate.append("gdpbox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "GDPTitle").text("Real Output (GDP) Annualized" + " Growth Rate, " + timePeriodText);
-				d3.selectAll("gdpbox").append("gdpnum").attr("class", "dataNum").text(function(){return percentage(GDPLTById[d.id]) + "%"; });
+				d3.selectAll("gdpbox").append("gdpnum").attr("class", "dataNum").text(function(){return percentage(GDPLTById[selectedCounty.id]) + "%"; });
 			infoUpdate.append("unembox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "unemTitle").html("Average Annual Unemployment,*" + "<br/>" + timePeriodText);
-				d3.selectAll("unembox").append("unemnum").attr("class", "dataNum").text(function(){return percentage(unemLTById[d.id]) + "%";});
+				d3.selectAll("unembox").append("unemnum").attr("class", "dataNum").text(function(){return percentage(unemLTById[selectedCounty.id]) + "%";});
 			infoUpdate.append("hhbox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "HHTitle").text("Median Home Prices Annualized" + " Growth Rate, " + timePeriodText);
-				d3.selectAll("hhbox").append("hhnum").attr("class", "dataNum").text(function(){return percentage(HHLTById[d.id]) + "%"; });
+				d3.selectAll("hhbox").append("hhnum").attr("class", "dataNum").text(function(){return percentage(HHLTById[selectedCounty.id]) + "%"; });
 			/*infoUpdate.append("avgwagebox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").text("Average Wage Per Job Growth Rate, " + timePeriodText);
 				d3.selectAll("avgwagebox").append("avgwagenum").attr("class", "dataNum").text(function(){return percentage(avgWageLTById[d.id]) });*/
 			infoUpdate.append("jobsbox").attr("class", "dataBox").append("datatitle").attr("class", "dataTitle").attr("id", "jobsTitle").html("Jobs Annualized" + "<br/>" + " Growth Rate, " + timePeriodText);
-				d3.selectAll("jobsbox").append("jobsnum").attr("class", "dataNum").text(function(){return percentage(jobsLTById[d.id]) + "%"; });
+				d3.selectAll("jobsbox").append("jobsnum").attr("class", "dataNum").text(function(){return percentage(jobsLTById[selectedCounty.id]) + "%"; });
 		}
 		///indicator definitions
 				
@@ -561,7 +604,12 @@ function changeCSS(cssFile, cssLinkIndex){
 	 	function timeUpdate() {
 	 		timePeriod = this.id;
 	 		timePeriodText = this.getElementsByTagName('p')[0].innerHTML;
-	 		updateData(selectedCounty);
+	 		if(!comparePressed){
+	 			updateData(selectedCounty);
+	 		}
+	 		else{
+	 			updateData(comparisonCounty);
+	 		}
 	 	}
 	// END Time period selections
 	//time period hover definitions
@@ -597,6 +645,9 @@ function highlightSelected(d){
       .classed("active", selected && function(d) { return d === selected; });
       
 }
+
+
+
 
 //Zoom functions. 
 	var k = 1,
