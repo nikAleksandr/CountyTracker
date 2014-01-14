@@ -426,6 +426,7 @@ legend i {
 #fullReport{
 	display: inline-block;
 	font-size: 1.5em;
+	line-height: 1em;
 	margin: 0;
 	position: absolute;
 	top: .8em;
