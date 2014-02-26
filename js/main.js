@@ -271,7 +271,7 @@ function ready(error, us, CountyData) {
 		var fullReport = d3.select("#infoBar").append("div").attr("id", "fullReport");
 			fullReport.append("p").html('<a href="http://www.naco.org/countyTracker">Read the full report</a>');
 			
-		var webinar = fullReport.append("p").html('<a href="https://www2.gotomeeting.com/register/618343202">Register for our free webinar</a>');
+		var webinar = fullReport.append("p").html('<a href="https://www2.gotomeeting.com/register/618343202">Watch the webinar recording</a>');
 		
 		//create the form element for selecting/zooming to states
 			xState = "";
