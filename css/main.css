@@ -116,6 +116,7 @@ body {
 	font-size: 1em;
 }
 
+
 #byline{
 	color:#0A84C1;
 	float: right;
@@ -410,6 +411,18 @@ legend i {
 	top: 1.5em;
 	margin: 0;
 	font-size: 1.5em;
+}
+
+#search_str, #submit_btn{
+	display: inline-block;
+	position: absolute;
+	right: 1em;
+	top: 5em;
+	margin: 0;
+	font-size: 1em;
+}
+#search_str{
+	right:6.5em;
 }
 
 #USmapButton{
