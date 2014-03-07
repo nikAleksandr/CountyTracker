@@ -339,26 +339,27 @@ function ready(error, us, CountyData) {
 	 		d3.selectAll(".linkDir").remove();
 		}		
 			
-		var USmapButton = d3.select("#infoBar").append("div").attr("id", "USmapButton").on("click", function(){ xclickZoom(centered); clearInfoBar(); });
-			USmapButton.text("Return to US Map");
+		var USmapButton = d3.select("#USmapButton").on("click", function(){ xclickZoom(centered); clearInfoBar(); });
 			
 		var searchField = d3.select('#infoBar').append("input")
-			.attr('type', 'text')
+			.attr('type', 'search')
 			.attr('id', 'search_str')
 			.attr('placeholder', 'Name County, ST');
 		var submitBtn = d3.select('#infoBar').append('input')
 			.attr('type', 'button')
 			.attr('id', 'submit_btn')
 			.attr('value', 'Search')
-			.on('click', function(){
+			.on('click', function searchSubmit(){
+				
 			    var search_str = document.getElementById('search_str').value;
 				var search_arr = search_str.split(" ");
 				var stateName = search_arr[search_arr.length-1].toUpperCase();
-				var geoDesc = ["County", "City", "Borough", "Parish"];
+					if(stateName.length==4){
+						stateName = stateName.substr(1,2);
+					}
+				var geoDesc = ["County", "County,", "City", "City,", "city", "city,", "Borough", "Borough,", "Parish", "Parish,"];
 				var countyName = "";
 				var descBin = false;
-			
-				
 				for(i=0; i<search_arr.length; i++){
 					var a = search_arr[i].toUpperCase();
 					for(j=0; j<geoDesc.length; j++){

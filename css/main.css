@@ -408,7 +408,7 @@ legend i {
 	display: inline-block;
 	position: absolute;
 	right: 1em;
-	top: 1.5em;
+	top: 0em;
 	margin: 0;
 	font-size: 1.5em;
 }
@@ -417,21 +417,24 @@ legend i {
 	display: inline-block;
 	position: absolute;
 	right: 1em;
-	top: 5em;
+	top: 3em;
 	margin: 0;
 	font-size: 1em;
 }
 #search_str{
 	right:6.5em;
 }
+#submit_btn{
+	color:#222;
+}
 
 #USmapButton{
-	display: inline-block;
 	font-size: 1.5em;
 	margin: 0;
-	position: absolute;
-	top: 0em;
-	right: 2.5em;
+	float: right;
+	clear: right;
+	position: relative;
+	padding-top: 2em;
 	cursor: pointer;
 	color: #0A84C1;
 }
