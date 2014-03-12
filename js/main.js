@@ -295,6 +295,7 @@ function ready(error, us, CountyData) {
 					"Pennsylvania": 42,
 					"Rhode Island": 44,
 					"South Carolina": 45,
+					"South Dakota": 46,
 					"Tennessee": 47,
 					"Texas": 48,
 					"Utah": 49,
@@ -360,7 +361,7 @@ function ready(error, us, CountyData) {
 				var geoDesc = ["County", "County,", "City", "City,", "city", "city,", "Borough", "Borough,", "Parish", "Parish,"];
 				var countyName = "";
 				var descBin = false;
-				for(i=0; i<search_arr.length; i++){
+				for(i=0; i<search_arr.length-1; i++){
 					var a = search_arr[i].toUpperCase();
 					for(j=0; j<geoDesc.length; j++){
 						if(a==geoDesc[j].toUpperCase()){
@@ -372,6 +373,7 @@ function ready(error, us, CountyData) {
 						countyName = countyName.concat(a, " ");
 					}
 				}
+					countyName = countyName.replace(",", "");
 				//console.log(countyName + geoDesc[0] + " ("+stateName+")");	
 				
 				var search_comb = "";
@@ -613,8 +615,8 @@ function highlightSelected(d){
 	  } else {
 	    selected = null;
 	  }
-
-	g.selectAll("path")
+	
+	g.select("#counties").selectAll("path")
       .classed("active", selected && function(d) { return d === selected; });
       
 }
