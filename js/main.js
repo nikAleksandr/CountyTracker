@@ -228,12 +228,6 @@ function ready(error, us, CountyData) {
         	statePathById[d.id] = d;
 		}
 		
-		var d, feats = topojson.feature(us, us.objects.counties).features;
-		for (var i=0; i<feats.length; i++) { 
-        	d = feats[i];
-        	countyPathById[d.id] = d;
-		}
-		
 	
 	  g.append("g")
 	      .attr("id", "states")
@@ -401,6 +395,7 @@ function ready(error, us, CountyData) {
 	      .on("click", clickUpdateData)
 	      .on("dblclick", followLink)
 	      .attr("stateFip", function(d) { return stateById[d.id]; })
+	      .each( function(d) { countyPathById[d.id] = d; })
 	      .append("svg:title")
 	      	.text(function(d) {return nameById[d.id]; });
 	
