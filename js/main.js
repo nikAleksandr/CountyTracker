@@ -339,48 +339,18 @@ function ready(error, us, CountyData) {
 		var searchField = d3.select('#infoBar').append("input")
 			.attr('type', 'search')
 			.attr('id', 'search_str')
-			.attr('placeholder', 'Name County, ST');
+			.attr('placeholder', 'Name County, ST')
+			.on('keyup', function() {
+				if (d3.event.keyCode == 13) {
+					searchSubmit();
+				}
+			});
+		
 		var submitBtn = d3.select('#infoBar').append('input')
 			.attr('type', 'button')
 			.attr('id', 'submit_btn')
 			.attr('value', 'Search')
-			.on('click', function searchSubmit(){
-				
-			    var search_str = document.getElementById('search_str').value;
-				var search_arr = search_str.split(" ");
-				var stateName = search_arr[search_arr.length-1].toUpperCase();
-					if(stateName.length==4){
-						stateName = stateName.substr(1,2);
-					}
-				var geoDesc = ["County", "County,", "City", "City,", "city", "city,", "Borough", "Borough,", "Parish", "Parish,"];
-				var countyName = "";
-				var descBin = false;
-				for(i=0; i<search_arr.length-1; i++){
-					var a = search_arr[i].toUpperCase();
-					for(j=0; j<geoDesc.length; j++){
-						if(a==geoDesc[j].toUpperCase()){
-							descBin=true;
-							break;
-						}
-					}
-					if(!descBin){
-						countyName = countyName.concat(a, " ");
-					}
-				}
-					countyName = countyName.replace(",", "");
-				//console.log(countyName + geoDesc[0] + " ("+stateName+")");	
-				
-				var search_comb = "";
-		    	for(j=0; j<geoDesc.length; j++){
-		    		search_comb = toTitleCase(countyName) + geoDesc[j] + " ("+stateName+")";
-		    		if(idByName[search_comb]){
-		    			var foundId = parseInt(idByName[search_comb]);
-		    			console.log(search_comb + " " + foundId);
-		    			clickUpdateData(countyPathById[foundId]);
-		    		}
-		    	}
-			});
-		
+			.on('click', searchSubmit);
 	   
 			
 	
@@ -410,6 +380,41 @@ function ready(error, us, CountyData) {
 	  
 }
 
+	function searchSubmit(){				
+	    var search_str = document.getElementById('search_str').value;
+		var search_arr = search_str.split(" ");
+		var stateName = search_arr[search_arr.length-1].toUpperCase();
+		if(stateName.length == 4) stateName = stateName.substr(1,2);
+		var geoDesc = ["County", "County,", "City", "City,", "city", "city,", "Borough", "Borough,", "Parish", "Parish,"];
+		var countyName = "";
+		var descBin = false;
+		for(i=0; i<search_arr.length-1; i++){
+			var a = search_arr[i].toUpperCase();
+			for(j=0; j<geoDesc.length; j++){
+				if(a==geoDesc[j].toUpperCase()){
+					descBin=true;
+					break;
+				}
+			}
+			if(!descBin){
+				countyName = countyName.concat(a, " ");
+			}
+		}
+		
+		countyName = countyName.replace(",", "");
+		//console.log(countyName + geoDesc[0] + " ("+stateName+")");	
+		
+		var search_comb = "";
+    	for(j=0; j<geoDesc.length; j++){
+    		search_comb = toTitleCase(countyName) + geoDesc[j] + " ("+stateName+")";
+    		if(idByName[search_comb]){
+    			var foundId = parseInt(idByName[search_comb]);
+    			console.log(search_comb + " " + foundId);
+    			clickUpdateData(countyPathById[foundId]);
+    		}
+    	}
+	}
+	
 	function clickUpdateData(d) {
 			console.log(d.id);
 			//infoBar.transition().style("height", "35 %");
