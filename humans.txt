@@ -7,6 +7,7 @@
     Nicholas Lyell -- Web Developer/Data Analyst/Project Lead -- nlyell@naco.org
     Emily Star -- Graphic Designer -- estar@naco.org
     Emilia Istrate -- Deparment Head -- eistrate@naco.org
+    Jefferson Pecht -- Web Development -- jpecht@naco.org
 
 
 # THANKS
