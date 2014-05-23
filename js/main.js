@@ -190,7 +190,7 @@ function ready(error, us, CountyData) {
 	CountyData.forEach(function(d) { 
 	  		sizeById[d.id] = +d.LgMdSm, 
 	  		nameById[d.id] = d.geography,
-	  		idByName[d.geography] = d.id,
+	  		idByName[toTitleCase(d.geography)] = d.id,
 	  		stateById[d.id] = + d.stateFips,
 	  		linkById[d.id] = d.profLink;
 	  	//2013 Values
@@ -383,7 +383,7 @@ function ready(error, us, CountyData) {
 	function searchSubmit(){				
 	    var search_str = document.getElementById('search_str').value;
 		var search_arr = search_str.split(" ");
-		var stateName = search_arr[search_arr.length-1].toUpperCase();
+		var stateName = toTitleCase(search_arr[search_arr.length-1]);
 		if(stateName.length == 4) stateName = stateName.substr(1,2);
 		var geoDesc = ["County", "County,", "City", "City,", "city", "city,", "Borough", "Borough,", "Parish", "Parish,"];
 		var countyName = "";

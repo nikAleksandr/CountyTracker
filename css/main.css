@@ -259,7 +259,7 @@ map path {
 	cursor: pointer;
 }
 
-.county .active {
+#counties .active {
 	fill: #FFCC66;
 }
 
