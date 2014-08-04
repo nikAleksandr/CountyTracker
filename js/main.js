@@ -362,12 +362,21 @@ function ready(error, us, CountyData) {
 	      .attr("d", path)
 	      .attr("class", function(d) { return  color(sizeById[d.id]); })
 	      .attr("id", function(d){ return stateById[d.id]; })
-	      .on("click", clickUpdateData)
-	      .on("dblclick", followLink)
 	      .attr("stateFip", function(d) { return stateById[d.id]; })
+	      .on('click', clickUpdateData)
 	      .each( function(d) { countyPathById[d.id] = d; })
 	      .append("svg:title")
 	      	.text(function(d) {return nameById[d.id]; });
+	      	
+	if ($('html').hasClass('no-touch')) {
+		g.selectAll('path').on("dblclick", followLink);
+	} else {
+		// register doubletap instead of doubleclick for touch devices
+		$('path').addSwipeEvents().bind('doubletap', function(event, touch) {
+			event.stopPropagation();
+			followLink(d3.select(this).datum());
+		});
+	}
 	
 	 
 	 //state borders from Zoom example      
