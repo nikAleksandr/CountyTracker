@@ -391,6 +391,57 @@ function ready(error, us, CountyData) {
 
 	function searchSubmit(){				
 	    var search_str = document.getElementById('search_str').value;
+		if (search_str === '') {
+			noty({text: 'Enter a county name to search.', type: 'information', timeout: 2000, killer: true});
+			return;
+		}
+		
+		// strip out state if there is one
+		var countyName = search_str, stateName = '';
+		if (search_str.indexOf(',') !== -1) {
+			var csArray = search_str.split(',');
+			stateName = toTitleCase(csArray[1].trim());
+			countyName = toTitleCase(csArray[0].trim());
+		}
+		
+		// trim out the fat
+		var fats = ['County', 'City', 'Borough', 'Parish'];
+		for (var i = 0; i < fats.length; i++) {
+			if (countyName.indexOf(fats[i]) !== -1) {
+				countyName.replace(fats[i], '');
+				countyName.trim();
+			}
+		}
+			
+		// check for entire phrase matches; only works if state was provided
+		var geoDesc = [' County', ' City', ' Borough', ' Parish'];
+		if (stateName !== '') {
+			for (var j = 0; j < fats.length; j++) {
+				var search_comb = countyName + ' ' + fats[j] + ' (' + stateName + ')';
+				if (idByName[search_comb]) {
+	    			var foundId = parseInt(idByName[search_comb]);
+	    			clickUpdateData(countyPathById[foundId]);
+					return;
+				}
+			}
+			
+			// special case
+			if (countyName.toLowerCase() === 'washington' && stateName === 'Dc') { clickUpdateData(countyPathById[11001]); return; }
+		}
+		
+		// check for partial word matches
+		var pMatchArray = [];
+		for (var ind in idByName) {
+			if (ind.toLowerCase().indexOf(countyName.toLowerCase()) != -1) pMatchArray.push(parseInt(idByName[ind]));
+		}
+		if (pMatchArray.length === 0) noty({text: 'No county matches. Search again.', type: 'information', timeout: 2000, killer: true});
+		else if (pMatchArray.length === 1) clickUpdateData(countyPathById[pMatchArray[0]]);
+		else noty({text: 'Multiple county matches. Try including the state in your search.', type: 'information', timeout: 2000, killer: true});
+
+
+
+
+	    /*(var search_str = document.getElementById('search_str').value;
 		var search_arr = search_str.split(" ");
 		var stateName = toTitleCase(search_arr[search_arr.length-1]);
 		if(stateName.length == 4) stateName = stateName.substr(1,2);
@@ -421,7 +472,7 @@ function ready(error, us, CountyData) {
     			console.log(search_comb + " " + foundId);
     			clickUpdateData(countyPathById[foundId]);
     		}
-    	}
+    	}*/
 	}
 	
 	function clickUpdateData(d) {
